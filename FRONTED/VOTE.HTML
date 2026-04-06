@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VoteGuard — Secure Digital Ballot</title>
+  <link rel="stylesheet" href="VOTE.CSS" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 1 — LANDING / IDENTITY
+  ════════════════════════════════════════════ -->
+  <section id="screen-landing" class="screen active">
+    <div class="grid-bg"></div>
+    <div class="landing-center">
+      <div class="emblem">🏛️</div>
+      <p class="tagline">REPUBLIC OF INDIA · DIGITAL ELECTION COMMISSION</p>
+      <h1>Vote<span class="accent">Guard</span></h1>
+      <p class="sub">Powered by Auth0 Token Vault &amp; Blockchain Transparency</p>
+      <div class="vault-badge">🔐 Auth0 Token Vault · Zero-Trust Architecture</div>
+      <button id="btn-login" class="btn-primary pulse">
+        <span class="btn-icon">🔑</span> Login with Auth0
+      </button>
+      <p class="disclaimer">Your identity is verified via Auth0 Universal Login. No credentials are stored locally.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 2 — STEPPER FLOW
+  ════════════════════════════════════════════ -->
+  <section id="screen-main" class="screen">
+
+    <!-- Top Nav -->
+    <nav class="topnav">
+      <span class="nav-brand">🏛️ VoteGuard</span>
+      <div class="nav-user">
+        <span class="user-chip" id="user-chip">👤 Voter</span>
+        <span class="vault-chip">🔐 Vault Active</span>
+        <button id="btn-logout" class="btn-ghost">Logout</button>
+      </div>
+    </nav>
+
+    <!-- Stepper -->
+    <div class="stepper" id="stepper">
+      <div class="step active" data-step="1"><span class="step-num">1</span><span class="step-label">Identity</span></div>
+      <div class="step-line"></div>
+      <div class="step" data-step="2"><span class="step-num">2</span><span class="step-label">Region</span></div>
+      <div class="step-line"></div>
+      <div class="step" data-step="3"><span class="step-num">3</span><span class="step-label">Vote</span></div>
+    </div>
+
+    <!-- ── Step 1: Identity Verified ── -->
+    <div class="step-panel active" id="panel-1">
+      <div class="card glass center-card">
+        <div class="verified-icon">✅</div>
+        <h2>Identity Verified</h2>
+        <p>Auth0 Token Vault has authenticated your session securely.</p>
+        <div class="info-row"><span>Token Type</span><span class="badge green">JWT · RS256</span></div>
+        <div class="info-row"><span>Vault Status</span><span class="badge green">Active</span></div>
+        <div class="info-row"><span>Session</span><span class="badge blue">Encrypted</span></div>
+        <button class="btn-primary" onclick="goStep(2)">Continue to Region Check →</button>
+      </div>
+    </div>
+
+    <!-- ── Step 2: Region / Eligibility ── -->
+    <div class="step-panel" id="panel-2">
+      <div class="card glass center-card">
+        <h2>📍 Geographic Eligibility</h2>
+        <p>Select your registered state and constituency.</p>
+        <div class="form-group">
+          <label>State</label>
+          <select id="sel-state" onchange="onStateChange()">
+            <option value="">— Select State —</option>
+            <option>Gujarat</option>
+            <option>Maharashtra</option>
+            <option>Rajasthan</option>
+            <option>Delhi</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Constituency</label>
+          <select id="sel-const" disabled>
+            <option value="">— Select Constituency —</option>
+          </select>
+        </div>
+        <div id="region-verified" class="verified-banner hidden">
+          ✅ Verified — Your constituency is confirmed by the Token Vault.
+        </div>
+        <button class="btn-primary" id="btn-region-next" disabled onclick="goStep(3)">Proceed to Ballot →</button>
+      </div>
+    </div>
+
+    <!-- ── Step 3: Ballot ── -->
+    <div class="step-panel" id="panel-3">
+      <h2 class="ballot-title">🗳️ Official Digital Ballot</h2>
+      <p class="ballot-sub">Cast your vote. Each vote is recorded on-chain and is immutable.</p>
+
+      <div class="candidate-grid" id="candidate-grid">
+        <!-- Injected by JS -->
+      </div>
+
+      <!-- Blockchain Pulse -->
+      <div class="blockchain-panel glass">
+        <h3>⛓️ Blockchain Pulse — Live Transparency</h3>
+        <div class="pulse-row">
+          <div class="tx-feed" id="tx-feed"><!-- Injected by JS --></div>
+          <div class="vote-chart" id="vote-chart"><!-- Injected by JS --></div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       MANIFESTO MODAL
+  ════════════════════════════════════════════ -->
+  <div id="modal-overlay" class="modal-overlay hidden" onclick="closeModal()">
+    <div class="modal glass" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       AI AGENT FAB + CHAT
+  ════════════════════════════════════════════ -->
+  <button id="fab" class="fab" onclick="toggleChat()" title="AI Secure Assistant">✨</button>
+
+  <div id="chat-window" class="chat-window glass hidden">
+    <div class="chat-header">
+      <span>🤖 Secure AI Assistant</span>
+      <button onclick="toggleChat()">✕</button>
+    </div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input-row">
+      <input id="chat-input" type="text" placeholder="Ask about manifestos or your constituency…" onkeydown="if(event.key==='Enter') sendChat()" />
+      <button onclick="sendChat()">➤</button>
+    </div>
+  </div>
+
+  <script src="VOTE.JS"></script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 {
+  "outputDirectory": "FRONTED",
   "rewrites": [
-    { "source": "/", "destination": "/FRONTED/VOTE.HTML" }
+    { "source": "/", "destination": "/VOTE.HTML" }
   ]
 }

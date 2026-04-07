@@ -36,4 +36,8 @@ npm run deploy:amoy
   - Region key: `regionKey(stateId, constituencyId)`
   - Verified voter gate: `setVerifiedVoter(address,bool)` (call from your KYC/verifier backend)
   - Vote: `vote(stateId,constituencyId,candidateId)`
+## 🎥 Demo Video
 
+[![VoteGuard Demo](https://img.youtube.com/vi/otAQHkG9zdg/0.jpg)](https://youtu.be/otAQHkG9zdg?si=cWCA6qAC8Gyap7fQ)
+
+> Click the thumbnail above to watch the full demo on YouTube.

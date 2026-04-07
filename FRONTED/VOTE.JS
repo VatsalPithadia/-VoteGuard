@@ -15,7 +15,7 @@ const CONFIG = {
   // Local Hardhat Network
   CHAIN_ID:   31337,
   CHAIN_NAME: "Hardhat Local",
-  RPC_URL:    "http://127.0.0.1:8545",
+  RPC_URL:    "http://192.168.1.3:8545",
   EXPLORER:   "http://127.0.0.1:8545",
 
   CONSTITUENCIES: {

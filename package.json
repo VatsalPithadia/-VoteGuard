@@ -7,11 +7,12 @@
     "build": "hardhat compile",
     "test": "hardhat test",
     "deploy:amoy": "hardhat run scripts/deploy.ts --network amoy",
+    "deploy:minimal": "hardhat run scripts/deploy-minimal.ts --network amoy",
+    "deploy:local": "hardhat run scripts/deploy-minimal.ts --network localhost",
     "sample:local": "hardhat run scripts/sample-flow.ts"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-ethers": "^3.1.0",
-    "@nomicfoundation/hardhat-network-helpers": "^1.1.0",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@types/chai": "^4.3.20",
     "@types/mocha": "^10.0.10",
     "chai": "^4.5.0",
@@ -21,7 +22,7 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^5.0.2"
+    "@openzeppelin/contracts": "^5.0.2",
+    "dotenv": "^16.4.5"
   }
 }
-
